@@ -84,7 +84,7 @@ namespace QuestBookCreator
         {
             Node t = null;
             for (int i = 0; i < pars.Count; i++)
-                if (pars[i].get_name().ToString() == name)
+                if (pars[i].get_name() == name)
                 {
                     t = pars[i];
                     break;
@@ -102,13 +102,13 @@ namespace QuestBookCreator
                 startNode.DrawSpec2(g);    
         }
 
-        public void find_max_name()
-        {
-            int t = -1;
-            for (int i = 0; i < pars.Count; i++)
-                if (pars[i].get_name() > t) t = pars[i].get_name();
-            naming = t + 1;
-        }
+        //public void find_max_id()
+        //{
+        //    int t = -1;
+        //    for (int i = 0; i < pars.Count; i++)
+        //        if (pars[i].get_id() > t) t = pars[i].get_id();
+        //    naming = t + 1;
+        //}
 
         public void saveAs(string s)
         {
@@ -191,5 +191,42 @@ namespace QuestBookCreator
             }
         }
 
+        public bool hasInputEdge(Node node)
+        {
+            foreach (Node cur in pars)
+            {
+                if (cur == node) continue;
+
+                NodeContent nc = cur.getContent();
+                if (nc.hasLink(node.get_name()) == true)
+                    return true;
+            
+            
+            
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Удаляет все ссылки на параграф Node из всех остальных параграфов
+        /// </summary>
+        /// <param name="node"></param>
+        public void deleteLinksOn(Node node)
+        {
+            foreach (Node cur in pars)
+            {
+                if (cur == node) continue;
+
+                NodeContent nc = cur.getContent();
+                if (nc.hasLink(node.get_name()) == true)
+                {
+                    nc.deleteLink(node.get_name());
+                    cur.refreshChildren();
+                }
+            }
+
+            
+        }
     }
 }

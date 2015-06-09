@@ -31,8 +31,8 @@ namespace QuestBookCreator
            
 
 
-            Anchor anchor0 = new Anchor(curN.get_name().ToString()+"\n", font);
-            anchor0.Name = curN.get_name().ToString();
+            Anchor anchor0 = new Anchor(curN.get_name()+"\n", font);
+            anchor0.Name = curN.get_name();
             lElem.Add(anchor0);
 
 

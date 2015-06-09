@@ -145,7 +145,7 @@ namespace QuestBookCreator
         private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.Filter = "bin files (*.bin)|*.bin|All files (*.*)|*.*";
+            saveFileDialog1.Filter = "qbc files (*.qbc)|*.qbc|All files (*.*)|*.*";
             saveFileDialog1.FilterIndex = 1;
             saveFileDialog1.RestoreDirectory = true;
 
@@ -161,7 +161,7 @@ namespace QuestBookCreator
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
             openFileDialog1.InitialDirectory = "c:\\";
-            openFileDialog1.Filter = "bin files (*.bin)|*.bin|All files (*.*)|*.*";
+            openFileDialog1.Filter = "qbc files (*.qbc)|*.qbc|All files (*.*)|*.*";
             openFileDialog1.FilterIndex = 1;
             openFileDialog1.RestoreDirectory = true;
 
@@ -233,14 +233,31 @@ namespace QuestBookCreator
                 MessageBox.Show("Выберите узел");
                 return;
             }
-            var result = MessageBox.Show("Вы действительно хотите удалить этот узел?", "Подтвердите действие",
-                                 MessageBoxButtons.YesNo,
-                                 MessageBoxIcon.Question);
 
-            if (result == DialogResult.Yes)
+            if (curProj.hasInputEdge(curProj.curNode) == true)
             {
-                curProj.deleteCurNode();
-                Redraw();
+                DialogResult result = MessageBox.Show("На этот параграф есть действующие ссылки. Удалить параграф и все ссылки на него?", "Подтвердите действие",
+                                     MessageBoxButtons.YesNo,
+                                     MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    curProj.deleteLinksOn(curProj.curNode);
+                    curProj.deleteCurNode();
+                    Redraw();
+                }
+            }
+            else
+            {
+                DialogResult result = MessageBox.Show("Вы действительно хотите удалить этот узел?", "Подтвердите действие",
+                                     MessageBoxButtons.YesNo,
+                                     MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    curProj.deleteCurNode();
+                    Redraw();
+                }
             }
         }
 

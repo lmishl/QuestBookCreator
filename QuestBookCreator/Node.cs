@@ -17,7 +17,8 @@ namespace QuestBookCreator
         void setContent(NodeContent c);
         NodeContent getContent();
 
-        int get_name();
+        string get_name();
+        int get_id();
         void set_name(string s);
         void set_x(float p);
         void set_y(float p);

@@ -32,7 +32,7 @@ namespace QuestBookCreator
                 System.IO.Directory.CreateDirectory(pathToImages);
                 foreach (Node node in tmp)
                 {
-                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(path + node.get_name().ToString() + ".html", false, Encoding.UTF8))
+                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(path + node.get_name() + ".html", false, Encoding.UTF8))
                     {
                         file.Write("<html>");
                         file.Write("<body>");

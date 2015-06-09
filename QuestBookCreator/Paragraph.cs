@@ -18,7 +18,8 @@ namespace QuestBookCreator
         public void set_x(float p) { x = p; }
         public void set_y(float p) { y = p; }
         public void set_name(string s) { name = s; }
-        public int get_name() { return Convert.ToInt32(name); }
+        public string get_name() { return name; }
+        public int get_id() { return Convert.ToInt32(name); }
 
         List<Node> children;
 
@@ -106,7 +107,7 @@ namespace QuestBookCreator
             x = (float)rnd1.Next((int)(Constants.panelWidth - curPr.nodeWidth));
             y = (float)rnd1.Next((int)(Constants.panelHeight - curPr.nodeHeight));
             name = rnd1.Next(100).ToString();
-            nCont = new TextContent("текст");
+            nCont = new NodeContent("текст");
 
             children = new List<Node>();
 
