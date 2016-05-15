@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.SaveButton = new System.Windows.Forms.Button();
-            this.CancelButton1 = new System.Windows.Forms.Button();
-            this.AddLinkButton = new System.Windows.Forms.Button();
-            this.AddImageButton = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // richTextBox1
@@ -43,59 +43,57 @@
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
-            // SaveButton
+            // button1
             // 
-            this.SaveButton.Location = new System.Drawing.Point(320, 250);
-            this.SaveButton.Name = "SaveButton";
-            this.SaveButton.Size = new System.Drawing.Size(75, 23);
-            this.SaveButton.TabIndex = 1;
-            this.SaveButton.Text = "Сохранить";
-            this.SaveButton.UseVisualStyleBackColor = true;
-            this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
+            this.button1.Location = new System.Drawing.Point(320, 250);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Сохранить";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // CancelButton1
+            // button2
             // 
-            this.CancelButton1.Location = new System.Drawing.Point(413, 250);
-            this.CancelButton1.Name = "CancelButton1";
-            this.CancelButton1.Size = new System.Drawing.Size(75, 23);
-            this.CancelButton1.TabIndex = 2;
-            this.CancelButton1.Text = "Отмена";
-            this.CancelButton1.UseVisualStyleBackColor = true;
-            this.CancelButton1.Click += new System.EventHandler(this.CancelButton_Click);
+            this.button2.Location = new System.Drawing.Point(413, 250);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "Отмена";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // AddLinkButton
+            // button3
             // 
-            this.AddLinkButton.Location = new System.Drawing.Point(372, 57);
-            this.AddLinkButton.Name = "AddLinkButton";
-            this.AddLinkButton.Size = new System.Drawing.Size(116, 23);
-            this.AddLinkButton.TabIndex = 3;
-            this.AddLinkButton.Text = "Добавить переход";
-            this.AddLinkButton.UseVisualStyleBackColor = true;
-            this.AddLinkButton.Click += new System.EventHandler(this.AddLinkButton_Click);
+            this.button3.Location = new System.Drawing.Point(372, 57);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(116, 23);
+            this.button3.TabIndex = 3;
+            this.button3.Text = "Добавить переход";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // AddImageButton
+            // button4
             // 
-            this.AddImageButton.Location = new System.Drawing.Point(372, 110);
-            this.AddImageButton.Name = "AddImageButton";
-            this.AddImageButton.Size = new System.Drawing.Size(116, 23);
-            this.AddImageButton.TabIndex = 4;
-            this.AddImageButton.Text = "Добавить картинку";
-            this.AddImageButton.UseVisualStyleBackColor = true;
-            this.AddImageButton.Click += new System.EventHandler(this.AddImageButton_Click);
+            this.button4.Location = new System.Drawing.Point(372, 110);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(116, 23);
+            this.button4.TabIndex = 4;
+            this.button4.Text = "Добавить картинку";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // EditForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(514, 294);
-            this.Controls.Add(this.AddImageButton);
-            this.Controls.Add(this.AddLinkButton);
-            this.Controls.Add(this.CancelButton1);
-            this.Controls.Add(this.SaveButton);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.richTextBox1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "EditForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "EditForm";
             this.Load += new System.EventHandler(this.EditForm_Load);
             this.ResumeLayout(false);
@@ -105,9 +103,9 @@
         #endregion
 
         private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.Button SaveButton;
-        private System.Windows.Forms.Button CancelButton1;
-        private System.Windows.Forms.Button AddLinkButton;
-        private System.Windows.Forms.Button AddImageButton;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
     }
 }

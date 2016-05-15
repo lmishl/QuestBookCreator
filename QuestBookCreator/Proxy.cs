@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace QuestBookCreator
 {
-    class PdfConverter
+    class Proxy
     {
         List<IElement> lElem;
         IElement nextElem;
@@ -19,7 +19,7 @@ namespace QuestBookCreator
         public List<IElement> get_processed(Node curN)
         {
             int link=0;
-            //int cur_sign=0;
+            int cur_sign=0;
             string tmp = curN.getContent().getInfo();
             lElem=new List<IElement>();
 
@@ -31,8 +31,8 @@ namespace QuestBookCreator
            
 
 
-            Anchor anchor0 = new Anchor(curN.get_name()+"\n", font);
-            anchor0.Name = curN.get_name();
+            Anchor anchor0 = new Anchor(curN.get_name().ToString()+"\n", font);
+            anchor0.Name = curN.get_name().ToString();
             lElem.Add(anchor0);
 
 
@@ -43,9 +43,9 @@ namespace QuestBookCreator
                 link = tmp.IndexOf("[[");       //ищем сложный объект
 
 
-                if (link == -1)         //сложных объeктов нет, запиливаем текст и выходим
+                if (link == -1)         //сложных объуктов нет, запиливаем текст и выходим
                 {
-                    nextElem = new Phrase(tmp, font);      
+                    nextElem = new Phrase(tmp.Substring(cur_sign), font);      
                     lElem.Add(nextElem);
                     break;
                 }
@@ -53,7 +53,7 @@ namespace QuestBookCreator
                 //сложный объект есть!
                 if (link != 0)      //если есть текст до объекта
                 {
-                    nextElem = new Phrase(tmp.Substring(0, link), font);      //добавили  текст до ссылки     
+                    nextElem = new Phrase(tmp.Substring(cur_sign, link - cur_sign), font);      //добавили  текст до ссылки     
                     lElem.Add(nextElem);
                     tmp=tmp.Substring(link);        //обрезали начало
                 }

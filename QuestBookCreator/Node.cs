@@ -10,18 +10,15 @@ namespace QuestBookCreator
     public interface Node
     {
         void Draw(Graphics g);
-        void DrawSpec(Graphics g);        //для текущего
-        void DrawSpec2(Graphics g);         //для стартового
-        float get_x();
-        float get_y();
+        int get_x();
+        int get_y();
         void setContent(NodeContent c);
         NodeContent getContent();
 
-        string get_name();
-        int get_id();
+        int get_name();
         void set_name(string s);
-        void set_x(float p);
-        void set_y(float p);
+        void set_x(int p);
+        void set_y(int p);
 
         void refreshChildren();
     }

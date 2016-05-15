@@ -32,12 +32,12 @@ namespace QuestBookCreator
         Node curNode;
         List<Node> lnod;
 
-        private void CancelButton_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void SaveButton_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
             curNode.getContent().setInfo(richTextBox1.Text);
             this.Close();
@@ -49,14 +49,14 @@ namespace QuestBookCreator
                 richTextBox1.Text = curNode.getContent().getInfo();
         }
 
-        private void AddLinkButton_Click(object sender, EventArgs e)
+        private void button3_Click(object sender, EventArgs e)
         {
             AddingLink al = new AddingLink(curNode, lnod);
             al.ShowDialog();
             richTextBox1.Text += Constants.str_for_adding_form;
         }
 
-        private void AddImageButton_Click(object sender, EventArgs e)
+        private void button4_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
@@ -71,7 +71,7 @@ namespace QuestBookCreator
                 {
                     if ((openFileDialog1.OpenFile()) != null)
                     {
-                        richTextBox1.Text += "\n[[image:" + openFileDialog1.FileName + "]]";
+                        richTextBox1.Text += "[[image:" + openFileDialog1.FileName + "]]";
                     }
                 }
                 catch (Exception ex)

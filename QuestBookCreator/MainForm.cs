@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using iTextSharp;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
@@ -21,15 +22,24 @@ namespace QuestBookCreator
             InitializeComponent();
         }
 
-        Project curProj;
+        Project curProj;// = Project.Instance();
 
-        bool flag_node = false;
-        bool flag_click = false;
+        bool flag = false;
+        //bool edgeFlag = false;
+        //Node nod_for_edge;
+        Node tmp_node;
         int raznX = 0, raznY = 0; //для мыши
 
         public void Redraw()
         {
             panel1.Invalidate();
+        }
+
+        private void button1_Click(object sender, EventArgs e)          //это кнопка create node
+        {
+            Paragraph p = new Paragraph();
+            curProj.addNode(p);
+            Redraw();
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -39,8 +49,8 @@ namespace QuestBookCreator
 
         private void panel1_DoubleClick(object sender, EventArgs e)
         {
-            float mouseX = MousePosition.X - this.Location.X - panel1.Location.X - Constants.extraX;
-            float mouseY = MousePosition.Y - this.Location.Y - panel1.Location.Y - Constants.extraY;
+            int mouseX = MousePosition.X - this.Location.X - panel1.Location.X - Constants.extraX;
+            int mouseY = MousePosition.Y - this.Location.Y - panel1.Location.Y - Constants.extraY;
 
             Node curN = curProj.getNode(mouseX, mouseY);
             if (curN != null)
@@ -54,57 +64,45 @@ namespace QuestBookCreator
 
         private void panel1_MouseDown(object sender, MouseEventArgs e)
         {
-            float mouseX = MousePosition.X - this.Location.X - panel1.Location.X - Constants.extraX;
-            float mouseY = MousePosition.Y - this.Location.Y - panel1.Location.Y - Constants.extraY;
-            flag_click = true;
-            raznX = MousePosition.X;          //текущее смещение
-            raznY = MousePosition.Y;
+            int mouseX = MousePosition.X - this.Location.X - panel1.Location.X - Constants.extraX;
+            int mouseY = MousePosition.Y - this.Location.Y - panel1.Location.Y - Constants.extraY;
+
 
             Node curN = curProj.getNode(mouseX, mouseY);
             if (curN != null)
             {
-                flag_node = true;
-               
-                curProj.curNode = curN;
-                Refresh();
+                flag = true;
+                tmp_node = curN;
+                raznX = mouseX - curN.get_x();
+                raznY = mouseY - curN.get_y();
             }
+
         }
 
         private void panel1_MouseUp(object sender, MouseEventArgs e)
         {
-            flag_node = flag_click = false;
+            flag = false;
         }
 
         private void panel1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (flag_click)
+            if (flag)
             {
-                if (flag_node)
-                    movingNode(curProj.curNode);
-                else
-                {
-                    curProj.movingAll(MousePosition.X - raznX, MousePosition.Y - raznY);
-                    raznX = MousePosition.X;
-                    raznY = MousePosition.Y;
-                }
+                movingNode(tmp_node);
                 Redraw();
             }
         }
 
         void movingNode(Node k)
         {
-            //float mouseX = MousePosition.X - this.Location.X - panel1.Location.X - Constants.extraX;
-            //float mouseY = MousePosition.Y - this.Location.Y - panel1.Location.Y - Constants.extraY;
+            int mouseX = MousePosition.X - this.Location.X - panel1.Location.X - Constants.extraX;
+            int mouseY = MousePosition.Y - this.Location.Y - panel1.Location.Y - Constants.extraY;
 
-            //k.set_x(mouseX - raznX);
-            //k.set_y(mouseY - raznY);
-            k.set_x(k.get_x() + MousePosition.X - raznX);
-            k.set_y(k.get_y() + MousePosition.Y - raznY);
-            raznX = MousePosition.X;
-            raznY = MousePosition.Y;
+            k.set_x(mouseX - raznX);
+            k.set_y(mouseY - raznY);
         }
 
-        private void panel1_Click(object sender, EventArgs e)       //тут коменты
+        private void panel1_Click(object sender, EventArgs e)
         {
             //int mouseX = MousePosition.X - this.Location.X - panel1.Location.X - Constants.extraX;
             //int mouseY = MousePosition.Y - this.Location.Y - panel1.Location.Y - Constants.extraY;
@@ -142,26 +140,33 @@ namespace QuestBookCreator
 
         }
 
-        private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Stream myStream;
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.Filter = "qbc files (*.qbc)|*.qbc|All files (*.*)|*.*";
+
+            saveFileDialog1.Filter = "bin files (*.bin)|*.bin|All files (*.*)|*.*";
             saveFileDialog1.FilterIndex = 1;
             saveFileDialog1.RestoreDirectory = true;
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                string s = saveFileDialog1.FileName;
-                curProj.saveAs(s);
-                this.Text = s;
+                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                {
+                    BinaryFormatter serializer = new BinaryFormatter();
+                    serializer.Serialize(myStream, curProj);
+                    myStream.Close();
+                }
             }
         }
 
-        private void LoadToolStripMenuItem_Click(object sender, EventArgs e)
+        private void загрузитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Stream myStream = null;
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
             openFileDialog1.InitialDirectory = "c:\\";
-            openFileDialog1.Filter = "qbc files (*.qbc)|*.qbc|All files (*.*)|*.*";
+            openFileDialog1.Filter = "bin files (*.bin)|*.bin|All files (*.*)|*.*";
             openFileDialog1.FilterIndex = 1;
             openFileDialog1.RestoreDirectory = true;
 
@@ -169,160 +174,41 @@ namespace QuestBookCreator
             {
                 try
                 {
-                    string s = openFileDialog1.FileName;
-                    curProj = curProj.load(s);
-                    this.Text = s;
-                    Redraw();
+                    if ((myStream = openFileDialog1.OpenFile()) != null)
+                    {
+                        using (myStream)
+                        {
+
+                            BinaryFormatter deserializer = new BinaryFormatter();
+                            curProj = (Project)deserializer.Deserialize(myStream);
+                            curProj.find_max_name();
+                            Project.resetInstance(curProj);
+                            myStream.Close();
+                            Redraw();
+
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
                 }
-
             }
         }
 
-        private void BuildPdfToolStripMenuItem_Click(object sender, EventArgs e)
+        private void собратьКнигуToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (curProj.haveStart == false)
-            {
-                MessageBox.Show("Необходимо задать стартовый узел");
-                return;
-            }
-            curProj.curNode = curProj.startNode;
-            AbstractBuilder bb = new PdfBuilder();
+            BookBuilder bb = new BookBuilder();
             bb.Create(curProj);
-
+  
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            curProj = Project.Instance();
-        }
-
-        private void AddNodeButton_Click(object sender, EventArgs e)
-        {
-            Paragraph p = new Paragraph();
-            curProj.addNode(p);
-            Redraw();
-        }
-
-        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (curProj.canSave() == true)
-            {
-
-                try
-                {
-                    curProj.save();
-                    MessageBox.Show("Сохранено");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error" + ex.Message);
-                }
-            }
-            else SaveAsToolStripMenuItem_Click(sender, e);
-
-        }
-
-        private void DeleteNode_Click(object sender, EventArgs e)
-        {
-            if (curProj.curNode == null)
-            {
-                MessageBox.Show("Выберите узел");
-                return;
-            }
-
-            if (curProj.hasInputEdge(curProj.curNode) == true)
-            {
-                DialogResult result = MessageBox.Show("На этот параграф есть действующие ссылки. Удалить параграф и все ссылки на него?", "Подтвердите действие",
-                                     MessageBoxButtons.YesNo,
-                                     MessageBoxIcon.Question);
-
-                if (result == DialogResult.Yes)
-                {
-                    curProj.deleteLinksOn(curProj.curNode);
-                    curProj.deleteCurNode();
-                    Redraw();
-                }
-            }
-            else
-            {
-                DialogResult result = MessageBox.Show("Вы действительно хотите удалить этот узел?", "Подтвердите действие",
-                                     MessageBoxButtons.YesNo,
-                                     MessageBoxIcon.Question);
-
-                if (result == DialogResult.Yes)
-                {
-                    curProj.deleteCurNode();
-                    Redraw();
-                }
-            }
-        }
-
-        private void MakeStartButton_Click(object sender, EventArgs e)
-        {
-            if (curProj.curNode == null)
-                MessageBox.Show("Выбери вершину");
-            else
-            {
-                curProj.startNode = curProj.curNode;
-                curProj.haveStart = true;
-                Redraw();
-            }
+           curProj = Project.Instance();
         }
 
 
-        private void mainForm_mouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            // MessageBox.Show("1");
-            
 
-
-        }
-
-        private void zoomMinus_Click(object sender, EventArgs e)
-        {
-            if (Constants.minH > curProj.nodeHeight) return;          //уже слишком мелко
-            curProj.nodeHeight = curProj.nodeHeight / Constants.changingSpeed;
-            curProj.nodeWidth = curProj.nodeWidth / Constants.changingSpeed;
-            curProj.zoomMinus();
-            Redraw();
-            //label1.Text = Constants.nodeHeight.ToString();
-            //label2.Text = Constants.nodeWidth.ToString();
-
-        }
-
-        private void zoomPlus_Click(object sender, EventArgs e)
-        {
-            if (Constants.maxH < curProj.nodeHeight) return;          //уже слишком крупно
-            curProj.nodeHeight = curProj.nodeHeight * Constants.changingSpeed;
-            curProj.nodeWidth = curProj.nodeWidth * Constants.changingSpeed;
-            curProj.zoomPlus();
-            Redraw();
-            //label1.Text = Constants.nodeHeight.ToString();
-            //label2.Text = Constants.nodeWidth.ToString();
-        }
-
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            curProj = curProj.load("");
-            Redraw();
-
-        }
-
-        private void buildHtmlToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (curProj.haveStart == false)
-            {
-                MessageBox.Show("Необходимо задать стартовый узел");
-                return;
-            }
-            curProj.curNode = curProj.startNode;
-            AbstractBuilder bb = new HtmlBuilder();
-            bb.Create(curProj);
-
-        }
     }
 }

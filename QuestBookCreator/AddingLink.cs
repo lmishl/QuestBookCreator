@@ -36,7 +36,7 @@ namespace QuestBookCreator
         {
             if (textBox1.Text != "" && comboBox1.SelectedItem != null)
             {
-                Constants.str_for_adding_form = "\n[[link:" + textBox1.Text + "]|[" + comboBox1.SelectedItem.ToString() + "]]";
+                Constants.str_for_adding_form = "[[link:" + textBox1.Text + "]|[" + comboBox1.SelectedItem.ToString() + "]]";
                 this.Close();
             }
             else

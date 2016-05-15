@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace QuestBookCreator
 {
-    class PdfBuilder : AbstractBuilder
+    class BookBuilder
     {
         public void Create(Project curProj)
         {
@@ -32,7 +32,7 @@ namespace QuestBookCreator
                     List<Node> tmp = curProj.get_all();
 
                     List<IElement> lElem;
-                    PdfConverter pr = new PdfConverter();
+                    Proxy pr = new Proxy();
 
                     for (int i = 0; i < tmp.Count; i++)
                     {
